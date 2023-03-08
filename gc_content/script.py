@@ -6,10 +6,10 @@ with open("rosalind_gc.txt") as file:
         if line[0] == '>':
             if curr_string != "":
                 sequences.append(curr_string)
-            lables.append("".join([char for char in line][1:-1]))
+            lables.append(line.rstrip()[1:])
             curr_string = ""
         else:
-            curr_string += "".join([char for char in line][:-1])
+            curr_string += line.rstrip()
     sequences.append(curr_string)
 
 # breakpoint()
@@ -21,13 +21,15 @@ for idx in range(out_len):
     for char in sequences[idx]:
         if char == "G" or char == "C":
             gc_count += 1
-    gc_content[idx] = (gc_count / len(sequences[idx]))*100
+    gc_content[idx] = (lables[idx], (gc_count / len(sequences[idx]))*100)
 
-max_label, max_percentage = "", 0
-for idx in range(out_len):
-    if gc_content[idx] > max_percentage:
-        max_label = lables[idx]
-        max_percentage = gc_content[idx]
+# max_label, max_percentage = "", 0
+# for idx in range(out_len):
+#     if gc_content[idx] > max_percentage:
+#         max_label = lables[idx]
+#         max_percentage = gc_content[idx]
 
-print(max_label)
-print(max_percentage)
+gc_content.sort(key=lambda x: x[1])
+
+print(gc_content[-1][0])
+print(gc_content[-1][1])
